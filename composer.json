@@ -1,0 +1,11 @@
+{
+    "name": "nirys/ynaphp",
+    "description": "PHP wrapper on YNAB \"API\"",
+    "type": "library",
+    "license": "MIT",
+    "require": {},
+    "autoload":{
+        "psr-0" : {"": "src"}
+    }
+
+}
