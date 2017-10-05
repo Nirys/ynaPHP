@@ -84,19 +84,13 @@ class Client{
             $newData .= $key . '=' . urlencode($value). '&';
         }
         $newData = substr($newData, 0, strlen($newData)-1) ;
-        echo "POSTing " . print_r($newData, true) . "\n\n";
         $client = $this->getHttpClient();
         $client->setPost($newData);
         $client->setHeader('X-YNAB-Device-Id', $this->_id);
         $client->setHeader('X-YNAB-Client-App-Version','v1.18349');
         $client->setHeader('X-Session-Token',$this->_session);
-
         $client->setHeader('User-Agent','phpAPI');
         $data = $client->createCurl($url);
-
-        echo "Result:\n";
-        echo $data;
-        echo "\n\n";
 
         return json_decode($data);
     }
