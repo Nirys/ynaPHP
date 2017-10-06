@@ -17,8 +17,16 @@ class AbstractCollection implements \IteratorAggregate
         $this->_items = $items;
     }
 
-    public function add($item){
+    public function add($item, $key=null){
+      if($key){
+        $this->_items[$key] = $item;
+      }else{
         $this->_items[] = $item;
+      }
+    }
+
+    public function get($key){
+      return isset($this->_items[$key]) ? $this->_items[$key] : null;
     }
 
     public function find($key, $keyName = 'id'){
