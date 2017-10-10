@@ -19,15 +19,7 @@ class Account {
 
   public function setCalculatedBalances($data){
     $this->_clearedBalance = $data->cleared_balance / 1000;
-    $this->_unclearedBalance = $data->uncleared_balance / 1000;/*
-                            [entities_account_id] => 2c059d98-f7c6-4166-8811-36d419ec9249
-                            [is_tombstone] => 
-                            [cleared_balance] => -384620
-                            [uncleared_balance] => 0
-                            [info_count] => 0
-                            [warning_count] => 0
-                            [error_count] => 0
-                            [transaction_count] => 5*/
+    $this->_unclearedBalance = $data->uncleared_balance / 1000;
   }
 
   public function getId(){

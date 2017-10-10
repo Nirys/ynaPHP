@@ -7,6 +7,7 @@ class Budget {
   protected $_id, $_name, $_obsolete, $_createdAt, $_version;
   protected $_isLoaded = false;
   protected $_accounts = null;
+  protected $_categories = null;
 
   public function __construct($jsonData = null){
     if($jsonData){
@@ -39,6 +40,17 @@ class Budget {
       $this->_accounts->add($account, $account->getId());
     }
     $this->_isLoaded = true;
+
+    foreach($data->changed_entities->be_master_categories as $key=>$value){
+      $category = new Category($value);
+      $this->_categories->add($category, $category->getId());
+    }
+
+    foreach($data->changed_entities->be_subcategories as $key=>$value){
+      $category = new Category($value);
+      $this->_categories->add($category, $category->getId());
+    }
+
   }
 
   public function setVersion($id){
