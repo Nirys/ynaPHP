@@ -22,12 +22,18 @@ class Budget {
     return $this->_accounts;
   }
 
+  public function categories(){
+      return $this->_categories;
+  }
+
   public function isLoaded(){
     return $this->_isLoaded;
   }
 
   public function loadData($data){
     $this->_accounts = new AbstractCollection();
+    $this->_categories = new AbstractCollection();
+
     $accountCalcs = array();
 
     foreach($data->changed_entities->be_account_calculations as $key=>$value){

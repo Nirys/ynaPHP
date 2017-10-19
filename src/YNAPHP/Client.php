@@ -7,8 +7,6 @@
  */
 
 namespace YNAPHP;
-use YNAPHP\HttpClient;
-use YNAPHP\UUID;
 use YNAPHP\Budget\Budget;
 
 
@@ -17,19 +15,17 @@ class Client{
     protected $_session, $_defaultBudget, $_id;
     protected $_url = 'https://app.youneedabudget.com/api/v1/catalog';
     protected $_httpClient = null;
-    protected $_budgets = null;
+    protected $_budgets;
 
     public function __construct(){
         $this->_id = UUID::v4();
+        $this->_budgets = new AbstractCollection();
     }
 
     public function getBudget($id = null){
-      $budget = new Budget();
-      $budget->loadData(json_decode(file_get_contents('budget_data.txt')));
-      return $budget;
-
       if(!$id) $id = $this->_defaultBudget;
       if(!$this->_budgets) $this->syncCatalogData();
+      /** @var Budget $budget */
       $budget = $this->_budgets->get($id);
       if($budget){
         if(!$budget->isLoaded()){
@@ -53,7 +49,7 @@ class Client{
         $data = $this->httpPOST($this->_url, $data);
 
         if($data->error){
-            throw new \Exception($data->error['message']);
+            throw new \Exception($data->error->message);
         }else{
             $this->_user = $user;
             $this->_password = $password;
@@ -134,7 +130,7 @@ class Client{
         $client = $this->getHttpClient();
         $client->setPost($newData);
         $client->setHeader('X-YNAB-Device-Id', $this->_id);
-        $client->setHeader('X-YNAB-Client-App-Version','v1.18349');
+        $client->setHeader('X-YNAB-Client-App-Version','v1.18526');
         $client->setHeader('X-Session-Token',$this->_session);
 
         $client->setHeader('User-Agent','phpAPI');
