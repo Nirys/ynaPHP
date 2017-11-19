@@ -6,7 +6,9 @@ use YNAPHP\AbstractCollection;
 class Budget {
   protected $_id, $_name, $_obsolete, $_createdAt, $_version;
   protected $_isLoaded = false;
+    /** @var $_accounts AccountCollection */
   protected $_accounts = null;
+  /** @var $_categories CategoryCollection */
   protected $_categories = null;
 
   public function __construct($jsonData = null){
@@ -31,8 +33,8 @@ class Budget {
   }
 
   public function loadData($data){
-    $this->_accounts = new AbstractCollection();
-    $this->_categories = new AbstractCollection();
+    $this->_accounts = new AccountCollection();
+    $this->_categories = new CategoryCollection();
 
     $accountCalcs = array();
 
@@ -43,18 +45,20 @@ class Budget {
     foreach($data->changed_entities->be_accounts as $key=>$value){
       $account = new Account($value);
       $account->setCalculatedBalances($accountCalcs[$account->getId()]);
-      $this->_accounts->add($account, $account->getId());
+      $this->_accounts->add($account);
     }
     $this->_isLoaded = true;
 
     foreach($data->changed_entities->be_master_categories as $key=>$value){
       $category = new Category($value);
-      $this->_categories->add($category, $category->getId());
+      $this->_categories->add($category);
     }
 
     foreach($data->changed_entities->be_subcategories as $key=>$value){
       $category = new Category($value);
-      $this->_categories->add($category, $category->getId());
+      /** @var Category $parent */
+      $parent = $this->_categories->find($category->getParentId());
+      if($parent) $parent->addChild($category);
     }
 
   }
